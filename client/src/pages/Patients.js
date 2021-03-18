@@ -8,7 +8,7 @@ const Patients = (props)=>{
  const {data, loading, error} = useAxiosOnMount('/api/patients') 
 
  return (
-     <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading URL, please wait'}>
+     <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading, please wait'}>
         <List name='Patients'
           data={data}
           renderData={(patient)=> { 

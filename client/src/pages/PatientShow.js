@@ -25,7 +25,7 @@ const PatientShow = (props)=>{
 
 
  return (
-     <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading URL, please wait'}>
+     <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading, please wait'}>
         <CardContainer>
           <StringifyJson json={data} />
         </CardContainer>
