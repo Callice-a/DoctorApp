@@ -1,15 +1,48 @@
 import useAxiosOnMount from '../hooks/useAxiosOnMount'
 import AxiosContainer from '../components/AxiosContainer'
-import StringifyJson from '../components/StringifyJSON.js'
-import {useParams} from 'react-router-dom'
-import CardContainer from '../components/CardContainer'
+import StringifyJson from '../components/StringifyJSON'
+import { useParams } from 'react-router-dom'
 import Card from '../components/Card'
+import CardContainer from '../components/CardContainer'
+import LoaderAndError from '../components/LoaderAndError'
+import List from '../components/List'
+import Button from '../components/Button'
+import { useState } from 'react'
+import axios from 'axios'
+import {Select, Form} from 'semantic-ui-react'
 
 const PatientShow = (props)=>{
- const {id} = useParams()
- const {data, loading, error} = useAxiosOnMount(`/api/patients/${id}`)
+  const { id } = useParams()
+  const { data, loading, error, getData: getPatients, setData:x } = useAxiosOnMount(`/api/patients/${id}`)
+  const [show, setShow] = useState(false)
+  const [physicianID, setPhysicianID] = useState(null)
+  const [physicians, setPhysicians] = useState([])
+  const [date, setDate] = useState(new Date())
+  const [createLoading, setCreateLoading] = useState(false)
+  const [createError, setCreateError] = useState(null)
 
-  // trying to make physician/appointment data look nicer
+  if (loading || error) {
+    return <LoaderAndError fullError loading={loading} error={error} loaderMessage={'Loading URL, please wait'} />
+  }
+
+  const handleChange = (event, data) => {
+    setPhysicianID(data.value)
+  }
+
+  const handleSubmit = async () => {
+    setCreateLoading(true)
+    try {
+      let res = await axios.post(`/api/appointments`, { patient_id: id, physician_id: physicianID, appointment_date: date })
+      getPatients()
+      x({...data, appointments:[res.data, ...data.physicians]})
+      setCreateLoading(false)
+    } catch (err) {
+      debugger
+      setCreateLoading(false)
+
+      setCreateError({message: JSON.stringify(err.response.data, null, 2)})
+    }
+  }
 
   const renderPhysicians = () => {
     return data.physicians.map(object => {
@@ -27,16 +60,53 @@ const PatientShow = (props)=>{
     )
   }
 
+  const getPhysicianOptions = () => {
+    console.log(data.physicians)
+    return data.physicians.map(d => {
+      return { key: d.name, value: d.id, text: d.name }
+    })
+  }
+
+  const renderForm = () => {
+    if (createLoading || createError) {
+      return <LoaderAndError loading={createLoading} error={createError} loaderMessage={'Creating Appointment, please wait'} />
+    }
+
+  }
 
  return (
-   <>
-   {data && <h1>Appointments for: {data.patient.name}</h1>}
-     <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading, please wait'}>
-        <CardContainer>
-          {data && renderPhysicians()}
-        </CardContainer>
-     </AxiosContainer>
-     </>
+  <>
+    <div>
+      {data && <h1>Appointments for: {data.patient.name}</h1>}
+        <Button onClick={() => setShow(!show)}>Add Appointment</Button>
+        {show &&
+          <div>
+            <br/>
+            {renderForm()}
+            <Form onSubmit={handleSubmit()}> 
+              <Form.Field>
+                <label>Date</label>
+                <input value={date} onChange={(e) => setDate(e.target.value)} type='date' min='0' placeholder='Date' />
+              </Form.Field>
+              <Form.Field>
+                <label>Physician</label>
+                <Select onChange={handleChange} placeholder='Select Physician' options={getPhysicianOptions()} />
+              </Form.Field>
+
+              <Button type='submit'>Submit</Button>
+            </Form>
+
+
+
+          </div>
+         }
+      <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading, please wait'}>
+          <CardContainer>
+            {data && renderPhysicians()}
+          </CardContainer>
+      </AxiosContainer>
+    </div>
+  </>
  )
 }
 
