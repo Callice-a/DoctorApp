@@ -19,7 +19,7 @@ const Patients = (props)=>{
   const [patients, setPatients] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
-
+  
   useEffect(()=>{
     getPatients()
   }, [])
@@ -47,13 +47,15 @@ const Patients = (props)=>{
             renderData={(patient)=> { 
               return(
                 <Card>
-                  <Link to={`/patients/${patient.id}`}>
+                  {!showEditForm && <Link to={`/patients/${patient.id}`}>
                          <h1>{patient.name}</h1>
-                  </Link>
-                  <SEMButton color='violet' onClick={()=> {setShowEditForm(!showEditForm)}}>{showEditForm ? 'Hide Form' : 'Edit'}</SEMButton>
-                  {showEditForm && <PatientsEdit getPatients={getPatients} setShowEditForm={setShowEditForm}/>}
+                  </Link>}
+                  <div>
+                    <SEMButton color='violet' onClick={()=> {setShowEditForm(!showEditForm)}}>{showEditForm ? 'Hide Form' : 'Edit'}</SEMButton>
+                    {showEditForm && <PatientsEdit getPatients={getPatients} setShowEditForm={setShowEditForm} patient={patient} patientID={patient.id}/>}
 
-                  <SEMButton onClick={()=>deletePatient(patient.id)} color='red'>Delete</SEMButton>
+                    {!showEditForm && <SEMButton onClick={()=>deletePatient(patient.id)} color='red'>Delete</SEMButton>}
+                  </div>
                 </Card>
               )} 
             }
@@ -64,8 +66,8 @@ const Patients = (props)=>{
   return (
     <div>
       {data && <h1>Patients</h1>}
-        <Button onClick={() => setShow(!show)}>{show ? 'Hide Form' : 'Add New Patient'}</Button>
-        {show && <PatientsNew getPatients={getPatients} setShowForm={setShowForm}/>}
+        <Button onClick={() => setShowForm(!showForm)}>{showForm ? 'Hide Form' : 'Add New Patient'}</Button>
+        {showForm && <PatientsNew getPatients={getPatients} setShowForm={setShowForm}/>}
 
      <AxiosContainer fullError loading={loading} error={error} loaderMessage={'Loading, please wait'}>
        <CardContainer>

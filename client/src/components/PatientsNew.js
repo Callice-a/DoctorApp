@@ -3,13 +3,15 @@ import axios from 'axios'
 import {useState, useEffect} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 
-const PatientsNew = ({getPatients, setShowForm}) => {
+const PatientsNew = (props) => {
+  const {getPatients, setShowForm} = props
   const [name, setName] = useState('')
   let history = useHistory()
   
 
   
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     try{
       axios.post(`/api/patients`,{name})
       history.push('/patients')
