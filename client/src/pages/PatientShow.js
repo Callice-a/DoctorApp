@@ -6,18 +6,17 @@ import Card from '../components/Card'
 import CardContainer from '../components/CardContainer'
 import LoaderAndError from '../components/LoaderAndError'
 import List from '../components/List'
-import Button from '../components/Button'
 import { useState } from 'react'
 import axios from 'axios'
-import {Select, Form} from 'semantic-ui-react'
+import Button from '../components/Button'
+import { Button as SEMButton, Form, Select } from 'semantic-ui-react'
 
 const PatientShow = (props)=>{
   const { id } = useParams()
-  const { data, loading, error, getData: getPatients, setData:x } = useAxiosOnMount(`/api/patients/${id}`)
+  const { data, loading, error, getData: getUsers, setData:x } = useAxiosOnMount(`/api/patients/${id}`)
   const [show, setShow] = useState(false)
   const [physicianID, setPhysicianID] = useState(null)
-  const [physicians, setPhysicians] = useState([])
-  const [date, setDate] = useState(new Date())
+  const [appointment, setAppointment] = useState(new Date())
   const [createLoading, setCreateLoading] = useState(false)
   const [createError, setCreateError] = useState(null)
 
@@ -32,9 +31,9 @@ const PatientShow = (props)=>{
   const handleSubmit = async () => {
     setCreateLoading(true)
     try {
-      let res = await axios.post(`/api/appointments`, { patient_id: id, physician_id: physicianID, appointment_date: date })
-      getPatients()
-      x({...data, appointments:[res.data, ...data.physicians]})
+      let res = await axios.post(`/api/appointments`, { patient_id: id, physician_id: physicianID, appointment_date: appointment })
+      // getPatients()
+      // x({...data, appointments:[res.data, ...data.physicians]})
       setCreateLoading(false)
     } catch (err) {
       debugger
@@ -61,9 +60,8 @@ const PatientShow = (props)=>{
   }
 
   const getPhysicianOptions = () => {
-    console.log(data.physicians)
     return data.physicians.map(d => {
-      return { key: d.name, value: d.id, text: d.name }
+      return { key: d.physician.name, value: d.physician.id, text: d.physician.name }
     })
   }
 
@@ -83,17 +81,17 @@ const PatientShow = (props)=>{
           <div>
             <br/>
             {renderForm()}
-            <Form onSubmit={handleSubmit()}> 
+            <Form onSubmit={handleSubmit}> 
               <Form.Field>
                 <label>Date</label>
-                <input value={date} onChange={(e) => setDate(e.target.value)} type='date' min='0' placeholder='Date' />
+                <input value={appointment} onChange={(e) => setAppointment(e.target.value)} type='date' min='0' placeholder='Date' />
               </Form.Field>
               <Form.Field>
                 <label>Physician</label>
-                <Select onChange={handleChange} placeholder='Select Physician' options={getPhysicianOptions()} />
+                <Select onChange={handleChange} placeholder='Select Physician' options={data && getPhysicianOptions()} />
               </Form.Field>
 
-              <Button type='submit'>Submit</Button>
+              <SEMButton type='submit'>Submit</SEMButton>
             </Form>
 
 
