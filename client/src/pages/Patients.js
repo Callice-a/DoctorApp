@@ -62,7 +62,7 @@ const Patients = (props)=>{
             renderData={(patient)=> { 
               return(
                 <Card>
-                    {(editID === patient.id) && showEditForm && <PatientsEdit getPatients={getPatients} setShowEditForm={setShowEditForm} patient={patient} patientID={patient.id}/>}
+                    {(editID === patient.id) && showEditForm && <PatientsEdit getPatients={getPatients} setShowEditForm={setShowEditForm} patient={patient} patientID={patient.id} setEditID={setEditID}/>}
 
                   {(editID !== patient.id)&& <Link to={`/patients/${patient.id}`}>
                          <h1>{patient.name}</h1>

@@ -8,7 +8,7 @@ import {useHistory} from 'react-router-dom'
 
 
 const PatientsEdit = (props) => {
-  const {getPatients, setShowEditForm, patientID, patient} = props
+  const {getPatients, setShowEditForm, setEditID, patientID, patient} = props
   const [nameInit, setName] = useState(patient.name)
   let history = useHistory()
 
@@ -21,6 +21,7 @@ const PatientsEdit = (props) => {
       getPatients()
       console.log(getPatients())
       setShowEditForm(false)
+      setEditID(-1)
     } catch(err){
       alert(err)
     }    
