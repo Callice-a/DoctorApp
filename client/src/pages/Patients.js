@@ -19,6 +19,7 @@ const Patients = (props)=>{
   const [patients, setPatients] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
+  const [editID, setEditID] = useState(Number)
   
   useEffect(()=>{
     getPatients()
@@ -40,6 +41,20 @@ const Patients = (props)=>{
     setPatients(filterPatients)
   }
 
+  const editOnClick = (patient) => {
+    return(
+      <SEMButton color='blue' onClick={()=> {setShowEditForm(!showEditForm); setEditID(patient.id)}}>{showEditForm && (editID === patient.id) ? 'Hide Form' : 'Edit'}</SEMButton>
+    )
+  }
+
+  const hideEdit = (patient) => {
+    
+    if (patient.id===editID){
+    return(
+    <SEMButton color='red' onClick={()=> {setShowEditForm(!showEditForm); setEditID(-1)}}>Cancel Edit</SEMButton>
+    )}
+  }
+
   const renderPatients = () => {
     return(
       <List name='Patients'
@@ -47,14 +62,14 @@ const Patients = (props)=>{
             renderData={(patient)=> { 
               return(
                 <Card>
-                  {!showEditForm && <Link to={`/patients/${patient.id}`}>
+                    {(editID === patient.id) && showEditForm && <PatientsEdit getPatients={getPatients} setShowEditForm={setShowEditForm} patient={patient} patientID={patient.id}/>}
+
+                  {(editID !== patient.id)&& <Link to={`/patients/${patient.id}`}>
                          <h1>{patient.name}</h1>
                   </Link>}
                   <div>
-                    <SEMButton color='violet' onClick={()=> {setShowEditForm(!showEditForm)}}>{showEditForm ? 'Hide Form' : 'Edit'}</SEMButton>
-                    {showEditForm && <PatientsEdit getPatients={getPatients} setShowEditForm={setShowEditForm} patient={patient} patientID={patient.id}/>}
-
-                    {!showEditForm && <SEMButton onClick={()=>deletePatient(patient.id)} color='red'>Delete</SEMButton>}
+                    {!showEditForm ? editOnClick(patient) : hideEdit(patient)}
+                    {(editID !== patient.id) && <SEMButton onClick={()=>deletePatient(patient.id)} color='red'>Delete</SEMButton>}
                   </div>
                 </Card>
               )} 

@@ -43,8 +43,9 @@ const PatientsEdit = (props) => {
           placeholder="Name"
           />
         </Form.Field>
-        <Button type='submit'>Update</Button>
+        <Button color='blue' type='submit'>Update</Button>
       </Form>
+      <br/>
     </div>
   )
 }
