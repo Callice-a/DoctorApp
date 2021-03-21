@@ -3,6 +3,7 @@ import { MEDIUM_SPACE } from '../styles'
 import CardContainer from './CardContainer'
 import {MEDIUM_SPACING} from '../styles'
 import Fade from './Fade'
+import Button from './Button'
 
 const Card = (props) => {
     const {header, children} = props
@@ -12,6 +13,7 @@ const Card = (props) => {
            <header style={{marginBottom: MEDIUM_SPACING, display:'flex', justifyContent:'space-between'}}>
                <h3>{header}</h3>
                <p onClick={()=> {setHideBody(!hideBody)}}>{hideBody ? 'show ICON': 'hide ICON'}</p>
+               <Button>Cancel Appointment</Button>
            </header>
            {/* this is where my button/ nested content */}
            <Fade hide={hideBody}>
