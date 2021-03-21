@@ -9,7 +9,7 @@ const useAxiosOnMount = (url) => {
    useEffect(()=>{
        getData()
    },[])
-   const getData = async()=>{
+   const getData = async () => {
        try{
          let res = await axios.get(url)
          // if res comes back as something other than res.data or res.data.data
@@ -21,7 +21,7 @@ const useAxiosOnMount = (url) => {
            setLoading(false)
        }
    }
-   return { data: data, loading: loading, error:error}
+   return { data: data, loading: loading, error: error, getData: getData}
 }
 
 export default useAxiosOnMount

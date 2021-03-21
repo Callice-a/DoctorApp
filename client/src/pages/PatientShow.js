@@ -1,7 +1,6 @@
 import useAxiosOnMount from '../hooks/useAxiosOnMount'
 import AxiosContainer from '../components/AxiosContainer'
-import StringifyJson from '../components/StringifyJSON.js'
-import {useParams} from 'react-router-dom'
+import {useParams} from 'react-router'
 import CardContainer from '../components/CardContainer'
 import Card from '../components/Card'
 
@@ -41,3 +40,5 @@ const PatientShow = (props)=>{
 }
 
 export default PatientShow
+
+

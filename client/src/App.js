@@ -16,7 +16,8 @@ function App() {
   return (
     <>
     <NavBar />
-    <h1 style={{paddingLeft: '20px', color: PRIMARY_COLOR }}>Doctor_App</h1>
+    <h1 style={{paddingLeft: '20px', color: PRIMARY_COLOR }}>Evil Dr. Homie</h1>
+    <h3 style={{paddingLeft: '20px', color: PRIMARY_COLOR }}>Your #1 App For All Your Shady Medical Dealings</h3>
     <Container>
       <Switch>
         <Route exact path='/' component={Home} />

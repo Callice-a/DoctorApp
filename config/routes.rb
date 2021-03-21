@@ -3,8 +3,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     get "/api_test", to:'static#api_test'
-    resources :physicians
-    resources :appointments
+    resources :physicians do 
+      resources :appointments
+    end 
     resources :patients
   end
 end
