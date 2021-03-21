@@ -1,7 +1,6 @@
 import useAxiosOnMount from '../hooks/useAxiosOnMount'
 import AxiosContainer from '../components/AxiosContainer'
 import {useParams} from 'react-router'
-import CardContainer from '../components/CardContainer'
 import Card from '../components/Card'
 import CardContainer from '../components/CardContainer'
 import LoaderAndError from '../components/LoaderAndError'
