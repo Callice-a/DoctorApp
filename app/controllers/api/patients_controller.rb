@@ -20,9 +20,18 @@ class Api::PatientsController < ApplicationController
     end
   end
 
+  def update
+    patient = Patient.find(params[:id])
+    if patient.update(patient_params)
+      render json: patient
+    else
+      render json: { errors: patient.errors }, status: :unprocessable_entity
+    end
+  end
+
   def destroy
-   @patient.destroy
-   render json: @patient
+    patient = Patient.find(params[:id]).destroy
+   render json: patient
   end
   
   private
